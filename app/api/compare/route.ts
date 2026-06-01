@@ -11,7 +11,7 @@ function buildCompareFetchErrorResponse(user: string, reason: unknown): NextResp
   if (lowerMessage.includes('not found') || lowerMessage.includes('could not resolve')) {
     return NextResponse.json(
       {
-        error: `GitHub user "${user}" was not found.`,
+        error: `Failed to fetch data for "${user}". GitHub user "${user}" was not found.`,
       },
       { status: 404 }
     );
@@ -25,6 +25,13 @@ function buildCompareFetchErrorResponse(user: string, reason: unknown): NextResp
     return NextResponse.json(
       { error: 'GitHub API rate limit reached. Please try again later.' },
       { status: 403 }
+    );
+  }
+
+  if (lowerMessage.includes('timeout')) {
+    return NextResponse.json(
+      { error: `Connection timeout. Unable to fetch GitHub data for "${user}".` },
+      { status: 500 }
     );
   }
 
