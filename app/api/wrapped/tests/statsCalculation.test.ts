@@ -46,6 +46,7 @@ describe('GET /api/wrapped stats calculation', () => {
     vi.clearAllMocks();
 
     const wrappedStats: WrappedStats = {
+      calendar: statsCalendar,
       ...calculateWrappedStats(statsCalendar),
       topLanguage: 'TypeScript',
     };

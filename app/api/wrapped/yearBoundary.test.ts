@@ -24,6 +24,7 @@ const mockCalendar: ContributionCalendar = {
 };
 
 const mockWrappedStats: WrappedStats = {
+  calendar: mockCalendar,
   totalContributions: 1420,
   mostActiveDate: '2023-11-20',
   highestDailyCount: 42,
