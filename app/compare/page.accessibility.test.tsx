@@ -17,12 +17,13 @@ describe('ComparePage Accessibility Standards & Screen Reader Aria Compliance', 
     const interactiveElements = [...buttons, ...textboxes];
 
     interactiveElements.forEach((element) => {
-      const hasAriaLabel = element.hasAttribute('aria-label');
-      const hasAriaLabelledBy = element.hasAttribute('aria-labelledby');
-      const hasAriaDescribedBy = element.hasAttribute('aria-describedby');
-      const hasPlaceholder = element.hasAttribute('placeholder');
-      const hasLabelNode = element.labels && element.labels.length > 0;
-      const hasTextContent = element.textContent && element.textContent.trim().length > 0;
+      const htmlElement = element as HTMLInputElement | HTMLButtonElement;
+      const hasAriaLabel = htmlElement.hasAttribute('aria-label');
+      const hasAriaLabelledBy = htmlElement.hasAttribute('aria-labelledby');
+      const hasAriaDescribedBy = htmlElement.hasAttribute('aria-describedby');
+      const hasPlaceholder = htmlElement.hasAttribute('placeholder');
+      const hasLabelNode = htmlElement.labels && htmlElement.labels.length > 0;
+      const hasTextContent = htmlElement.textContent && htmlElement.textContent.trim().length > 0;
 
       expect(
         hasAriaLabel ||
