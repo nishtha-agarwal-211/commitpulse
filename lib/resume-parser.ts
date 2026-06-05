@@ -1,5 +1,4 @@
 import type { ParsedResume, Education, Experience } from '@/types/student';
-import mammoth from 'mammoth';
 
 // Polyfill DOMMatrix for server-side/test environments to prevent pdfjs-dist crash
 if (typeof globalThis !== 'undefined' && !('DOMMatrix' in globalThis)) {
@@ -131,21 +130,25 @@ async function extractTextFromBuffer(buffer: Buffer, mimeType: string): Promise<
       } else {
         rawText = buffer.toString('utf-8');
       }
-    } catch {
+    } catch (error) {
+      console.warn('Failed to parse PDF using pdf-parse, falling back to UTF-8 decoding:', error);
       rawText = buffer.toString('utf-8');
     }
   } else if (
-    mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-    mimeType === 'application/msword'
+    mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   ) {
     try {
       if (buffer.toString('utf-8', 0, 2) === 'PK') {
-        const result = await mammoth.extractRawText({ buffer });
+        const mammothModule = await import('mammoth');
+        const mammothParser = ((mammothModule as unknown as { default?: unknown }).default ||
+          mammothModule) as typeof mammothModule;
+        const result = await mammothParser.extractRawText({ buffer });
         rawText = result.value;
       } else {
         rawText = buffer.toString('utf-8');
       }
-    } catch {
+    } catch (error) {
+      console.warn('Failed to parse DOCX using mammoth, falling back to UTF-8 decoding:', error);
       rawText = buffer.toString('utf-8');
     }
   } else {
@@ -193,7 +196,6 @@ export async function parseResume(buffer: Buffer, mimeType: string): Promise<Par
 export const ALLOWED_MIME_TYPES = [
   'application/pdf',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'application/msword',
 ];
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -206,7 +208,6 @@ const FILE_SIGNATURES: Record<string, number[][]> = {
     [0x50, 0x4b, 0x05, 0x06],
     [0x50, 0x4b, 0x07, 0x08],
   ],
-  'application/msword': [[0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]],
 };
 
 export function hasValidFileSignature(buffer: Buffer, mimeType: string): boolean {
