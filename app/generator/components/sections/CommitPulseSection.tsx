@@ -87,6 +87,7 @@ export function CommitPulseSection({
   const [badgeLoaded, setBadgeLoaded] = useState(false);
   const [badgeError, setBadgeError] = useState(false);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (!debouncedUsername) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
