@@ -14,9 +14,6 @@ export function getRecommendations(selectedIds: string[]): RecommendedTechnology
     return [];
   }
 
-  // Debug: log selected technologies
-  console.log('[RecommendationEngine] Selected Technologies:', selectedIds);
-
   const selectedSet = new Set(selectedIds);
   const candidatesMap = new Map<string, { edges: GraphEdge[] }>();
 
@@ -24,12 +21,8 @@ export function getRecommendations(selectedIds: string[]): RecommendedTechnology
   for (const selectedId of selectedIds) {
     const node = DEPENDENCY_GRAPH[selectedId];
     if (!node) {
-      console.log(`[RecommendationEngine] ⚠ No graph node found for: "${selectedId}"`);
       continue;
     }
-    console.log(
-      `[RecommendationEngine] ✓ Graph node found for: "${selectedId}" (${node.edges.length} edges)`
-    );
 
     for (const edge of node.edges) {
       if (selectedSet.has(edge.targetId)) {
@@ -101,12 +94,6 @@ export function getRecommendations(selectedIds: string[]): RecommendedTechnology
     }
     return a.id.localeCompare(b.id);
   });
-
-  // Debug: log final recommendation list
-  console.log(
-    '[RecommendationEngine] Recommendations:',
-    sorted.map((r) => `${r.id}(${r.score}%)`)
-  );
 
   return sorted;
 }
