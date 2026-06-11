@@ -10,6 +10,42 @@ html {
   scroll-behavior: smooth;
 }
 @layer utilities {
+  /* Typography enhancement utilities */
+  .text-readable-sm {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    letter-spacing: 0.2px;
+  }
+
+  .text-readable-base {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    letter-spacing: 0.3px;
+  }
+
+  .text-readable-lg {
+    font-size: 1.1875rem;
+    line-height: 1.8;
+    letter-spacing: 0.4px;
+  }
+
+  /* Increase small text sizes for better readability */
+  .text-xs {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .text-sm {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+
+  /* Enhance descriptive/helper text across the app */
+  .prose p {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
+
   .slider::-webkit-slider-thumb {
     appearance: none;
     width: 20px;
@@ -42,6 +78,44 @@ html {
   .slider::-moz-range-track {
     background: transparent;
   }
+
+  /* Improve dark mode secondary text for better readability while preserving hierarchy */
+  .dark .text-gray-500,
+  .dark .text-zinc-500,
+  .dark .text-gray-400 {
+    color: #d4d4d8;
+  }
+
+  .dark .text-white\/20 {
+    color: rgba(255, 255, 255, 0.56);
+  }
+
+  .dark .text-white\/25 {
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .dark .text-white\/30 {
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .dark .text-white\/35 {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .dark .text-white\/40 {
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .dark .text-white\/45 {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .dark input::placeholder,
+  .dark textarea::placeholder,
+  .dark select::placeholder {
+    color: rgba(255, 255, 255, 0.66);
+    opacity: 1;
+  }
 }
 
 /* Shimmer Animation */
@@ -56,8 +130,8 @@ html {
 }
 
 .shimmer {
-  background-color: #1a1a1a; /* base dark gray */
-  background: linear-gradient(
+  background-color: #1e2433; /* visible dark blue-gray on black */
+  background-image: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
     rgba(255, 255, 255, 0.08) 50%,
@@ -75,6 +149,11 @@ html {
   --color-border: rgba(255, 255, 255, 0.08);
   --color-muted: #a1a1aa;
   --color-accent: rgba(99, 102, 241, 0.5);
+  /* Chart / Recharts theme tokens (used by inline chart styles) */
+  --recharts-tooltip-bg: rgba(255, 255, 255, 0.95);
+  --recharts-tooltip-color: #0d1117;
+  --recharts-tooltip-accent: #06b6d4;
+  --chart-axis-color: #6b7280; /* gray-500 */
   /* indigo glow, hover only */
 }
 
@@ -92,11 +171,97 @@ body {
   color: #ffffff;
 }
 
+/* Dark theme overrides for chart tokens */
+.dark {
+  --recharts-tooltip-bg: rgba(24, 24, 27, 0.9);
+  --recharts-tooltip-color: #ffffff;
+  --recharts-tooltip-accent: #06b6d4;
+  --chart-axis-color: #d4d4d8; /* maps to improved contrast in dark mode */
+}
+
 /* Vercel-style focus ring */
+/* Keyboard focus ring — visible only for keyboard nav, not mouse clicks */
 @layer base {
   *:focus-visible {
-    outline: 2px solid rgba(99, 102, 241, 0.6);
-    outline-offset: 2px;
+    outline: 2px solid #34d399;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Enhanced typography for better readability */
+  p {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    letter-spacing: 0.3px;
+  }
+
+  p.text-sm {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+
+  p.text-base {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+
+  p.text-lg {
+    font-size: 1.1875rem;
+    line-height: 1.8;
+  }
+
+  p.text-xl {
+    font-size: 1.375rem;
+    line-height: 1.85;
+  }
+
+  p.text-2xl {
+    font-size: 1.6875rem;
+    line-height: 1.9;
+  }
+
+  /* Increase default body text size */
+  body {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+
+  /* Improve span and inline text readability */
+  span {
+    line-height: inherit;
+  }
+
+  /* Button and interactive text */
+  button,
+  a {
+    font-size: inherit;
+  }
+
+  /* Label and form text */
+  label {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  h1 {
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.4;
   }
 }
 
