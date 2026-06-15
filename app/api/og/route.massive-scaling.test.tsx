@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { NextRequest } from 'next/server';
 import { GET } from './route';
 
 // Strictly typed mock interfaces to avoid 'any'
@@ -28,8 +29,8 @@ const setupFetchMock = () => {
   }) as unknown as typeof fetch;
 };
 
-// Helper to extract a massive scaling mock request
-const createMassiveRequest = (): Request => {
+// Helper to extract a massive scaling mock request using NextRequest
+const createMassiveRequest = (): NextRequest => {
   const url = new URL('http://localhost/api/og');
   url.searchParams.append('user', 'extreme_scaling_user');
   url.searchParams.append('commits', '999999999');
@@ -38,7 +39,7 @@ const createMassiveRequest = (): Request => {
   url.searchParams.append('stars', '999999999');
   url.searchParams.append('theme', 'dark');
   url.searchParams.append('customTitle', 'A '.repeat(100)); // Enormous title to test wrapping
-  return new Request(url.toString());
+  return new NextRequest(url.toString());
 };
 
 describe('OG API Route - Massive Data Sets and High Bounds Scaling', () => {
@@ -162,9 +163,10 @@ describe('OG API Route - Massive Data Sets and High Bounds Scaling', () => {
     expect(rects.length).toBe(3);
 
     // Check integer overlap geometry scaling dynamically preventing overlapping items in 1200x630 OG bounds
-    const leftColumnX = extractAttribute(rects[0], 'x');
-    const middleColumnX = extractAttribute(rects[1], 'x');
-    const rightColumnX = extractAttribute(rects[2], 'x');
+    // Using the non-null assertion (!) to satisfy strict TypeScript arrays
+    const leftColumnX = extractAttribute(rects[0]!, 'x');
+    const middleColumnX = extractAttribute(rects[1]!, 'x');
+    const rightColumnX = extractAttribute(rects[2]!, 'x');
 
     // Verify strict isolation margins hold true for 1200x630 standard constraints
     expect(middleColumnX).toBeGreaterThan(leftColumnX + 400);
