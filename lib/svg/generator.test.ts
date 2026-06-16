@@ -7,14 +7,15 @@ import {
   generateRateLimitSVG,
   generateHeatmapSVG,
   generatePulseSVG,
+  resolveFont,
   generateVersusSVG,
   particleCount,
-  escapeXML,
   getSizeScale,
   truncateUsername,
   deterministicRandom,
   buildTowerPaths,
 } from './generator';
+import { escapeXML } from './sanitizer';
 import type { BadgeParams, ContributionCalendar, StreakStats, MonthlyStats } from '../../types';
 import { hexColor } from './sanitizer';
 import { themes } from './themes';
@@ -1529,7 +1530,7 @@ describe('escapeXML', () => {
   });
 
   it('leaves a safe string unchanged', () => {
-    const safe = 'Hello World 123!@#%^*()_+-=[]{}|;:,./?`~';
+    const safe = 'Hello World 123!@#%^*()_+-=[]{}|;:,./?~';
     expect(escapeXML(safe)).toBe(safe);
   });
   it('escapes script injection characters <script>&" together', () => {
